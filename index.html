@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Super cool messages</title>
+</head>
+<body>
+    <ul></ul>
+
+    <form>
+        <input type="text" />
+    </form>
+
+    <script src="http://code.jquery.com/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io.connect('http://dev.wormbase.org:9002');
+
+        socket.on('new message', function(msg) {
+            $('ul').append('<li>' +  msg.text + '</li>')
+        });
+
+        $('form').on('submit', function() {
+            var text = $('input').val();
+            $('input').val('');
+
+            socket.emit('new input', { text: text });
+            return false;
+        });
+    </script>
+</body>
+</html>
